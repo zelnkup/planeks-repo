@@ -1,3 +1,5 @@
+# cp .env-example .env
+
 # docker compose up
 
 Build an online service for generating CSV files with fake(dummy) data using Python and Django:
