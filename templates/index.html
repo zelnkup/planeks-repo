@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'users:index' %}">Fake csv</a>
+            </li>
+
+        </ul>
+        <p class="my-2 my-sm-0">hello, {{ request.user.username }}</p>
+
+        <a class="btn my-2 my-sm-0" href="{% url 'users:logout' %}">logout</a>
+    </div>
+</nav>
+
+<form>
+    {% csrf_token %}
+    <p  id="rowsInfo"></p>
+    Введите количество столбцов <input type="text" class="input-lg" id="rowsQuantity">
+    <a class="btn-lg" id="generateData">Сгенерировать</a>
+
+</form>
+
+<table class="table" id="schemas">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Created</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for schema in schemas %}
+    <tr>
+        <th scope="row">{{ schema.id }}</th>
+        <td>{{ schema.created_at }}</td>
+        <td class="{% if schema.status == 'ready' %} btn-success {% elif schema.status == 'processing' %} btn-primary {% else %} btn-danger {% endif %}">
+            {{ schema.get_status_display }}
+        </td>
+        <td><a {% if schema.file and schema.status == 'ready' %} href="{{ schema.file }}" {% endif %}
+            download>Download</a></td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
